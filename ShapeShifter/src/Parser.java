@@ -1,5 +1,13 @@
 import java.util.*;
 
+/**
+ * 
+ * Run the main method of the parser.
+ * Copy and paste the source of the shapeshifter game
+ * into the console.
+ * It will attempt to find a solution and generate coordinates
+ * to that solution.
+ */
 
 public class Parser {
 
