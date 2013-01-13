@@ -2,16 +2,14 @@ import java.util.*;
 
 /**
  * 
- * Run the main method of the parser.
- * Copy and paste the source of the shapeshifter game
- * into the console.
- * It will attempt to find a solution and generate coordinates
- * to that solution.
+ * This class is used to parse data from the source of the 
+ * game's page.
+ * 
  */
 
 public class Parser {
 
-	public static void main(String[] args) {
+	public static ParseInfo beginParsing() {
 		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		
@@ -31,6 +29,14 @@ public class Parser {
 				break;
 			
 			// Part 1 - get array
+			// In the HTML source code, each board game is represented
+			// as an array of 3 letter strings. Each board can be of
+			// variable height and length, and the three letter strings
+			// are also variable.
+			//
+			// The three letter strings that we are parsing correspond to a type
+			// of tile on the board.
+			
 			if (current.indexOf("imgLocStr = new Array(") != -1) {
 				int left = current.indexOf('(');
 				int right = current.indexOf(')');
@@ -66,6 +72,13 @@ public class Parser {
 			
 			// Part 2 - get sequence
 			// Precondition: Sequence can only have one tile after goal.
+			//
+			// This section parses the HTML code that defines the goal tile
+			// of the game. Also, this determines the sequence of tiles in the game.
+			// Each level of Shapeshifter follows a tile sequence that is defined
+			// at the bottom of the board. This tile sequence shows what the tile
+			// will "shapeshift" into after it is flipped.
+			
 			if (current.indexOf("bordercolor='gray'") != -1) {
 				int pos = current.indexOf(".gif");
 				while (pos != -1) {
@@ -89,6 +102,9 @@ public class Parser {
 			
 			
 			// Part 3 - BookKeeping
+			// Rather than working with an array of strings, I convert them into
+			// an array of integers so they are easier to work with. This allows for
+			// arithmetic operations too that makes other calculations easier later on.
 			intArray = new int[array.length][];
 			for (int i = 0; i < array.length; i++) {
 				intArray[i] = new int[array[i].length];
@@ -99,6 +115,16 @@ public class Parser {
 			goalValue = sequence.size() - 1;
 			
 			// Part 4 - Getting the pieces
+			//
+			// Now we parse the pieces in the game. It happens that each piece
+			// is created with an HTML table. In the source code, there
+			// are several tags to look out for that I commented out below. The tags
+			// and their attributes defined the dimension of each piece as well as what
+			// shape it has.
+			//
+			// This code is a little convoluted;
+			// I'm thinking recursion would have been better here...
+			
 			if (current.indexOf("<big>ACTIVE SHAPE</big>") != -1) {
 				
 				/*  String startRow = "<tr>";
@@ -155,8 +181,7 @@ public class Parser {
 		*/
 		scanner.close();
 		System.out.println("done parsing");
-		Solver s = new Solver(intArray, pieceList, goalValue);
-		s.solve();
+		return new ParseInfo(intArray, pieceList, goalValue);
 	}
 	
 }
