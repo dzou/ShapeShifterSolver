@@ -4,7 +4,7 @@ ShapeShifterSolver
 This program solves the Shapeshifter puzzle game on Neopets.com.
 
 Instructions:
-- Run the Parser class
+- Run the Driver class
 - Copy and paste the page source of the current shapeshifter game into console
 - After a solution is found, you will be given a list of coordinates. This is the order in which you have to place
    the pieces.
