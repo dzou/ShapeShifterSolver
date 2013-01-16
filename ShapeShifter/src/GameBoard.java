@@ -1,11 +1,17 @@
 import java.util.Arrays;
 import java.util.HashSet;
 
+/**
+ * 
+ * Each Gameboard is stored as a gameboard object which
+ * holds information about the tiles as well as
+ * other parameters that help in finding a solution.
+ */
 
 public class GameBoard implements Comparable<GameBoard> {
 	
-	int[][] gameBoard;
-	int goal, flips, flipsNeeded;
+	int[][] gameBoard;	
+	int goal, flips, flipsNeeded; 
 	int moveRow, moveCol;
 	int rows, cols;
 	int resets;
@@ -67,6 +73,15 @@ public class GameBoard implements Comparable<GameBoard> {
 		this.flips = rows * cols - flipsNeeded;
 	}
 	
+	/**
+	 * Places a piece on the board and generates the resulting gameboard
+	 * 
+	 * @param p - The piece that is placed on the board
+	 * @param x - x-coordinate of placement
+	 * @param y - y-coordinate of placement
+	 * @return - The resulting gameboard after the placement
+	 */
+	
 	public GameBoard place(Piece p, int x, int y) {
 		
 		int[][] copy = new int[gameBoard.length][];
@@ -101,6 +116,11 @@ public class GameBoard implements Comparable<GameBoard> {
 		return new GameBoard(copy, goal, x, y, resetCount, additionalFlipsNeeded);
 	}
 	
+	/**
+	 * Checks to see if the placement of Piece p in (x, y) fits
+	 * completely on the board.
+	 */
+	
 	public boolean fits(Piece p, int x, int y) {
 		int maxRow = gameBoard.length - x;
 		int maxCol = gameBoard[0].length - y;
@@ -111,9 +131,18 @@ public class GameBoard implements Comparable<GameBoard> {
 			return true;
 	}
 	
+	/**
+	 * 
+	 * @return true if the board is solved, false if not.
+	 */
+	
 	public boolean isSolved() {
 		return flipsNeeded == 0;
 	}
+	
+	/**
+	 * String representation for testing purposes.
+	 */
 	
 	public String toString() {
 		String result = "";
@@ -126,7 +155,10 @@ public class GameBoard implements Comparable<GameBoard> {
 		return result;
 	}
 
-	
+	/**
+	 * Used when placing Gameboards in priority queue.
+	 * This helps the tree pruning phase occur higher up in the tree.
+	 */
 	
 	public int compareTo(GameBoard other) {
 		if (this.resets > other.resets)
